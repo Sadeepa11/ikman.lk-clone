@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
+
+const FA = "'Open Sans', Arial, Helvetica, sans-serif";
 
 const ChatIcon = () => (
   <svg viewBox="0 0 60 60" width="24" height="24" fill="white" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
@@ -10,6 +13,12 @@ const ChatIcon = () => (
 const AccountIcon = () => (
   <svg viewBox="0 0 60 60" width="24" height="24" fill="white" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
     <path d="M36.723 34.65c1.637 1.243 6.495 2.38 10.397 4.484 1.286.694 1.396 1.724 1.492 2.345.097.622.3 7.404.3 7.404H11s.204-6.782.3-7.404c.097-.621.105-1.565 1.493-2.345 3.866-2.169 8.738-3.169 10.375-4.412.65-.494.482-1.292.627-2.058.144-.766.626-.24.626-1.052 0-.819.153-.676.063-1.763-.078-.948-1.386-1.049-1.46-2.821-.015-.374-.674-.623-1.06-1.197-.385-.574-1.01-1.579-1.01-2.727s.24-.862.24-2.297-.053-2.267.771-5.598c.308-1.243 1.354-2.7 2.402-3.359 1.413-.888.845.296 5.593-.756 3.077-.682 7.898 2.488 7.946 5.024.065 3.43.276 3.172.48 4.593.145 1.005.434.766.434 1.914 0 1.15-.626 2.584-1.011 3.158-.385.575-.742 1.496-.792 1.866-.252 1.917-1.54 1.474-1.593 2.501-.05.938-.111.818.03 1.549.118.61.476-.04.62.726.146.765.045 1.89.649 2.225" />
+  </svg>
+);
+
+const LogoutIcon = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="white" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
   </svg>
 );
 
@@ -27,7 +36,15 @@ const IkmanLogo = () => (
   </div>
 );
 
+const navLink: React.CSSProperties = {
+  display: 'flex', alignItems: 'center',
+  color: '#ffffff', textDecoration: 'none',
+  cursor: 'pointer', gap: 4, fontFamily: FA,
+};
+
 export const Header = () => {
+  const { isLoggedIn, logout, openLoginModal } = useAuth();
+
   return (
     <header
       className="sticky top-0 z-40"
@@ -64,15 +81,9 @@ export const Header = () => {
             <Link
               to="/"
               style={{
-                color: '#ffffff',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                fontWeight: 800,
-                fontSize: '14px',
-                padding: '4px 12px',
-                borderRadius: '4px',
-                margin: '0 12px',
-                display: 'inline-block',
+                color: '#ffffff', textDecoration: 'none', cursor: 'pointer',
+                fontWeight: 800, fontSize: '14px', padding: '4px 12px',
+                borderRadius: '4px', margin: '0 12px', display: 'inline-block',
               }}
             >
               All ads
@@ -81,41 +92,11 @@ export const Header = () => {
 
           {/* Language selector */}
           <li>
-            <div
-              style={{
-                display: 'flex',
-                border: '1px solid #007168',
-                borderRadius: '4px',
-                overflow: 'hidden',
-              }}
-            >
-              <button
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#ffffff',
-                  padding: '0 12px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'inherit',
-                  lineHeight: '1.71429',
-                }}
-              >
+            <div style={{ display: 'flex', border: '1px solid #007168', borderRadius: '4px', overflow: 'hidden' }}>
+              <button style={{ background: 'transparent', border: 'none', color: '#ffffff', padding: '0 12px', cursor: 'pointer', fontSize: '12px', fontFamily: 'inherit', lineHeight: '1.71429' }}>
                 සිංහල
               </button>
-              <button
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  borderLeft: '1px solid #007168',
-                  color: '#ffffff',
-                  padding: '0 12px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'inherit',
-                  lineHeight: '1.71429',
-                }}
-              >
+              <button style={{ background: 'transparent', border: 'none', borderLeft: '1px solid #007168', color: '#ffffff', padding: '0 12px', cursor: 'pointer', fontSize: '12px', fontFamily: 'inherit', lineHeight: '1.71429' }}>
                 தமிழ்
               </button>
             </div>
@@ -123,59 +104,68 @@ export const Header = () => {
         </ul>
 
         {/* Right side */}
-        <ul style={{ display: 'flex', alignItems: 'center', listStyle: 'none', margin: 0, padding: 0, fontSize: '12px', gap: 0 }}>
+        <ul style={{ display: 'flex', alignItems: 'center', listStyle: 'none', margin: 0, padding: 0, gap: 0 }}>
           {/* Chat */}
           <li style={{ marginRight: '24px' }}>
-            <Link
-              to="/chat"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#ffffff',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                gap: '4px',
-              }}
-            >
+            <Link to="/chat" style={navLink}>
               <ChatIcon />
-              <span style={{ marginLeft: '4px' }}>Chat</span>
+              <span style={{ marginLeft: 4, fontSize: 14 }}>Chat</span>
             </Link>
           </li>
 
-          {/* Account */}
-          <li style={{ marginRight: '16px' }}>
-            <Link
-              to="/account"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#ffffff',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                gap: '4px',
-              }}
-            >
-              <AccountIcon />
-              <span style={{ marginLeft: '4px' }}>Account</span>
-            </Link>
-          </li>
+          {isLoggedIn ? (
+            <>
+              {/* Account */}
+              <li style={{ marginRight: '24px' }}>
+                <Link to="/account" style={navLink}>
+                  <AccountIcon />
+                  <span style={{ marginLeft: 4, fontSize: 14 }}>Account</span>
+                </Link>
+              </li>
+
+              {/* LogOut */}
+              <li style={{ marginRight: '16px' }}>
+                <button
+                  onClick={logout}
+                  style={{
+                    ...navLink,
+                    background: 'transparent', border: 'none',
+                    cursor: 'pointer', padding: 0,
+                  }}
+                >
+                  <LogoutIcon />
+                  <span style={{ marginLeft: 4, fontSize: 14 }}>Logout</span>
+                </button>
+              </li>
+            </>
+          ) : (
+            /* Log In */
+            <li style={{ marginRight: '16px' }}>
+              <button
+                onClick={openLoginModal}
+                style={{
+                  ...navLink,
+                  background: 'transparent', border: 'none',
+                  cursor: 'pointer', padding: 0,
+                }}
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="white" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                  <path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z" />
+                </svg>
+                <span style={{ marginLeft: 4, fontSize: 14 }}>Log In</span>
+              </button>
+            </li>
+          )}
 
           {/* POST YOUR AD */}
           <li style={{ marginLeft: '12px' }}>
             <Link to="/post-ad" style={{ textDecoration: 'none' }}>
               <button
                 style={{
-                  backgroundColor: '#ffc800',
-                  color: '#673500',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  padding: '14px',
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  lineHeight: 1,
-                  whiteSpace: 'nowrap',
+                  backgroundColor: '#ffc800', color: '#673500',
+                  fontWeight: 800, fontSize: '14px', padding: '14px',
+                  borderRadius: '4px', border: 'none', cursor: 'pointer',
+                  fontFamily: 'inherit', lineHeight: 1, whiteSpace: 'nowrap',
                 }}
               >
                 POST YOUR AD

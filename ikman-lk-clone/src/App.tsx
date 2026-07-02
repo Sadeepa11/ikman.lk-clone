@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { AuthProvider } from './contexts/AuthContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
+import { LoginModal } from './components/LoginModal';
 import { PropertyListingPage } from './pages/PropertyListing';
 import { PropertyDetailsPage } from './pages/PropertyDetails';
 import { AccountPage } from './pages/Account';
@@ -44,13 +46,16 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1">
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <AnimatedRoutes />
+          </main>
+          <Footer />
+          <LoginModal />
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

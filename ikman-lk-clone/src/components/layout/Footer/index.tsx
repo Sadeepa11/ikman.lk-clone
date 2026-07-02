@@ -174,13 +174,10 @@ export const Footer = () => (
           lineHeight: '24px',
         }}>
           <div style={{ flexBasis: '50%' }}>
-            © 2026 ikman.lk. All rights reserved.
+            © 2026 All rights reserved.
           </div>
           <div style={{ flexBasis: '50%', textAlign: 'right' }}>
-            <svg width="90" height="24" viewBox="0 0 90 24" fill="none">
-              <text x="0" y="18" fontSize="20" fontWeight="900" fontFamily="'Open Sans',Arial,sans-serif" fill="rgb(47,52,50)">ikman</text>
-              <text x="63" y="18" fontSize="20" fontWeight="900" fontFamily="'Open Sans',Arial,sans-serif" fill="rgb(20,151,119)">.lk</text>
-            </svg>
+            <span style={{ fontFamily: FA, fontSize: 20, fontWeight: 800, color: 'rgb(47,52,50)' }}>Logo</span>
           </div>
         </div>
 
