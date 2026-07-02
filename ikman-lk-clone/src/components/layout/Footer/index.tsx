@@ -1,3 +1,5 @@
+import { useIsMobile } from '../../../hooks/useIsMobile';
+
 const FA = "'Open Sans', Arial, Helvetica, sans-serif";
 
 const sections = [
@@ -103,85 +105,92 @@ const AppStoreBadge = () => (
   </svg>
 );
 
-export const Footer = () => (
-  <footer style={{ backgroundColor: 'rgb(243,246,245)', fontFamily: FA, fontSize: 14 }}>
-    <div style={{ maxWidth: 985, margin: '0 auto' }}>
-      <div style={{ padding: '33px 0 0' }}>
+export const Footer = () => {
+  const isMobile = useIsMobile();
+  const sectionBasis = isMobile ? '45%' : '16%';
 
-        {/* Main grid */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 16, width: '100%', fontSize: 14, lineHeight: '24px' }}>
+  return (
+    <footer style={{ backgroundColor: 'rgb(243,246,245)', fontFamily: FA, fontSize: 14 }}>
+      <div style={{ maxWidth: 985, margin: '0 auto' }}>
+        <div style={{ padding: isMobile ? '24px 16px 0' : '33px 0 0' }}>
 
-          {/* Link sections */}
-          {sections.map(({ title, links }) => (
-            <div key={title} style={{ flexBasis: '16%', marginBottom: 16 }}>
-              <div style={{ fontWeight: 800, color: 'rgb(66,78,78)', marginBottom: 8, marginTop: 4, fontSize: 16 }}>
-                {title}
-              </div>
-              <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-                {links.map(({ label, href }) => (
-                  <li key={label} style={{ lineHeight: 2.3 }}>
-                    <a href={href} style={{ textDecoration: 'none', color: 'rgb(47,52,50)', fontFamily: FA }}>
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+          {/* Main grid */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 16, width: '100%', fontSize: 14, lineHeight: '24px', gap: isMobile ? '0 10%' : 0 }}>
 
-              {/* Social icons after Blog & Guides */}
-              {title === 'Blog & Guides' && (
-                <div style={{ marginTop: 8, textAlign: 'left' }}>
-                  {[
-                    { Icon: FacebookIcon, href: '#' },
-                    { Icon: TwitterIcon, href: '#' },
-                    { Icon: TikTokIcon, href: '#' },
-                    { Icon: YouTubeIcon, href: '#' },
-                  ].map(({ Icon, href }, i) => (
-                    <a key={i} href={href} style={{ marginRight: 8, display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-                      <Icon />
-                    </a>
-                  ))}
+            {/* Link sections */}
+            {sections.map(({ title, links }) => (
+              <div key={title} style={{ flexBasis: sectionBasis, marginBottom: 24 }}>
+                <div style={{ fontWeight: 800, color: 'rgb(66,78,78)', marginBottom: 8, marginTop: 4, fontSize: isMobile ? 14 : 16 }}>
+                  {title}
                 </div>
-              )}
-            </div>
-          ))}
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                  {links.map(({ label, href }) => (
+                    <li key={label} style={{ lineHeight: 2.3 }}>
+                      <a href={href} style={{ textDecoration: 'none', color: 'rgb(47,52,50)', fontFamily: FA }}>
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
 
-          {/* Download section */}
-          <div style={{ flexBasis: '16%', marginBottom: 16 }}>
-            <div style={{ fontWeight: 800, color: 'rgb(66,78,78)', marginBottom: 8, marginTop: 4, fontSize: 16 }}>
-              Download our app
+                {title === 'Blog & Guides' && (
+                  <div style={{ marginTop: 8 }}>
+                    {[
+                      { Icon: FacebookIcon, href: '#' },
+                      { Icon: TwitterIcon, href: '#' },
+                      { Icon: TikTokIcon, href: '#' },
+                      { Icon: YouTubeIcon, href: '#' },
+                    ].map(({ Icon, href }, i) => (
+                      <a key={i} href={href} style={{ marginRight: 8, display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+                        <Icon />
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Download section */}
+            <div style={{ flexBasis: sectionBasis, marginBottom: 24 }}>
+              <div style={{ fontWeight: 800, color: 'rgb(66,78,78)', marginBottom: 8, marginTop: 4, fontSize: isMobile ? 14 : 16 }}>
+                Download our app
+              </div>
+              <div style={{ display: 'grid', gap: 8 }}>
+                <a href="#" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                  <GooglePlayBadge />
+                </a>
+                <a href="#" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                  <AppStoreBadge />
+                </a>
+              </div>
             </div>
-            <div style={{ display: 'grid', gap: 8 }}>
-              <a href="#" style={{ display: 'inline-block', textDecoration: 'none' }}>
-                <GooglePlayBadge />
-              </a>
-              <a href="#" style={{ display: 'inline-block', textDecoration: 'none' }}>
-                <AppStoreBadge />
-              </a>
+
+          </div>
+
+          {/* Divider */}
+          <div style={{ borderBottom: '1px solid rgb(212,222,217)', width: '100%' }} />
+
+          {/* Copyright row */}
+          <div style={{
+            display: 'flex', flexWrap: 'wrap',
+            margin: '18px 0',
+            color: 'rgb(112,118,118)',
+            fontSize: 14, lineHeight: '24px',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'center' : 'stretch',
+            gap: isMobile ? 8 : 0,
+            textAlign: isMobile ? 'center' : 'left',
+          }}>
+            <div style={{ flexBasis: isMobile ? '100%' : '50%' }}>
+              © 2026 All rights reserved.
+            </div>
+            <div style={{ flexBasis: isMobile ? '100%' : '50%', textAlign: isMobile ? 'center' : 'right' }}>
+              <span style={{ fontFamily: FA, fontSize: 20, fontWeight: 800, color: 'rgb(47,52,50)' }}>Logo</span>
             </div>
           </div>
 
         </div>
-
-        {/* Divider */}
-        <div style={{ borderBottom: '1px solid rgb(212,222,217)', width: '100%' }} />
-
-        {/* Copyright row */}
-        <div style={{
-          display: 'flex', flexWrap: 'wrap',
-          margin: '18px 0',
-          color: 'rgb(112,118,118)',
-          fontSize: 14,
-          lineHeight: '24px',
-        }}>
-          <div style={{ flexBasis: '50%' }}>
-            © 2026 All rights reserved.
-          </div>
-          <div style={{ flexBasis: '50%', textAlign: 'right' }}>
-            <span style={{ fontFamily: FA, fontSize: 20, fontWeight: 800, color: 'rgb(47,52,50)' }}>Logo</span>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};

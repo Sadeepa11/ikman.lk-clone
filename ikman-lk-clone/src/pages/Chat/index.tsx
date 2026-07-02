@@ -2,7 +2,7 @@ const FA = "'Open Sans', Arial, sans-serif";
 
 export const ChatPage = () => (
   <div style={{ backgroundColor: '#f4f4f4', minHeight: '100vh', fontFamily: FA }}>
-    <div style={{ maxWidth: 985, margin: '16px auto', padding: '0 8px 34px' }}>
+    <div style={{ maxWidth: 985, margin: '16px auto', padding: '0 12px 34px' }}>
       <div style={{
         backgroundColor: '#fff', borderRadius: 4, padding: 24,
         textAlign: 'center',

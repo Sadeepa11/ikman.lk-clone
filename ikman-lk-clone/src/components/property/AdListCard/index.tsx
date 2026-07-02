@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Property } from '../../../types';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -36,10 +37,7 @@ const MemberBadge = ({ seller }: { seller: Property['seller'] }) => {
         <circle cx="10" cy="10" r="10" fill={isPremier ? 'rgb(255,152,0)' : 'rgb(0,152,119)'} />
         <path d="M5.5 10.5l3 3L15 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      <span style={{
-        fontSize: 11, fontWeight: 600, fontFamily: FA,
-        color: isPremier ? 'rgb(255,152,0)' : 'rgb(0,152,119)',
-      }}>
+      <span style={{ fontSize: 11, fontWeight: 600, fontFamily: FA, color: isPremier ? 'rgb(255,152,0)' : 'rgb(0,152,119)' }}>
         {isPremier ? 'Premier Member' : 'ikman Member'}
       </span>
     </div>
@@ -48,68 +46,49 @@ const MemberBadge = ({ seller }: { seller: Property['seller'] }) => {
 
 export const AdListCard = ({ property, isTop }: Props) => {
   const img = property.images?.[0] || '';
+  const isMobile = useIsMobile(480);
+
+  const imgW = isMobile ? 110 : (isTop ? 162 : 136);
+  const imgH = isMobile ? 90 : (isTop ? 122 : 102);
 
   if (isTop) {
     return (
-      <div style={{
-        border: '1px solid rgb(255,203,95)',
-        backgroundColor: '#fffbf0',
-        marginBottom: 8,
-        fontFamily: FA,
-      }}>
+      <div style={{ border: '1px solid rgb(255,203,95)', backgroundColor: '#fffbf0', marginBottom: 8, fontFamily: FA }}>
         <Link
           to={`/properties/${property.id}`}
-          style={{ display: 'flex', textDecoration: 'none', color: 'inherit', padding: '10px 12px', gap: 12 }}
+          style={{ display: 'flex', textDecoration: 'none', color: 'inherit', padding: isMobile ? '8px 10px' : '10px 12px', gap: isMobile ? 8 : 12 }}
         >
           {/* Image */}
-          <div style={{ width: 162, height: 122, flexShrink: 0, position: 'relative', overflow: 'hidden', backgroundColor: '#ddd' }}>
+          <div style={{ width: imgW, height: imgH, flexShrink: 0, position: 'relative', overflow: 'hidden', backgroundColor: '#ddd' }}>
             {img && (
-              <img
-                src={img}
-                alt={property.title}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+              <img src={img} alt={property.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
             )}
-            <div style={{
-              position: 'absolute', bottom: 0, right: 0,
-              backgroundColor: 'rgba(0,0,0,0.65)',
-              color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 0.3,
-              padding: '2px 7px', fontFamily: FA,
-            }}>
+            <div style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.65)', color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: 0.3, padding: '2px 7px', fontFamily: FA }}>
               Top Ad
             </div>
           </div>
 
           {/* Content */}
           <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-            {/* Title + Time */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 3 }}>
-              <div style={{
-                fontSize: 15, fontWeight: 700, color: 'rgb(47,52,50)',
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                lineHeight: '1.3', flex: 1, minWidth: 0,
-              }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 4, marginBottom: 3 }}>
+              <div style={{ fontSize: isMobile ? 13 : 15, fontWeight: 700, color: 'rgb(47,52,50)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: '1.3', flex: 1, minWidth: 0 }}>
                 {property.title}
               </div>
-              <div style={{ fontSize: 11, color: 'rgb(112,118,118)', flexShrink: 0, whiteSpace: 'nowrap', paddingTop: 2 }}>
-                {timeAgo(property.postedDate)}
-              </div>
+              {!isMobile && (
+                <div style={{ fontSize: 11, color: 'rgb(112,118,118)', flexShrink: 0, whiteSpace: 'nowrap', paddingTop: 2 }}>
+                  {timeAgo(property.postedDate)}
+                </div>
+              )}
             </div>
 
-            {/* Price */}
-            <div style={{ fontSize: 16, fontWeight: 700, color: 'rgb(0,152,119)', marginBottom: 5 }}>
+            <div style={{ fontSize: isMobile ? 14 : 16, fontWeight: 700, color: 'rgb(0,152,119)', marginBottom: 4 }}>
               Rs {property.price.toLocaleString()}
-              {property.priceType === 'monthly' && (
-                <span style={{ fontSize: 12, fontWeight: 400, color: 'rgb(112,118,118)' }}> /month</span>
-              )}
-              {property.priceType === 'negotiable' && (
-                <span style={{ fontSize: 11, fontWeight: 400, color: 'rgb(112,118,118)', marginLeft: 4 }}>Negotiable</span>
-              )}
+              {property.priceType === 'monthly' && <span style={{ fontSize: 12, fontWeight: 400, color: 'rgb(112,118,118)' }}> /month</span>}
+              {property.priceType === 'negotiable' && <span style={{ fontSize: 11, fontWeight: 400, color: 'rgb(112,118,118)', marginLeft: 4 }}>Negotiable</span>}
             </div>
 
-            {/* Specs */}
-            {(property.bedrooms || property.bathrooms || property.buildingSize || property.landSize) && (
+            {!isMobile && (property.bedrooms || property.bathrooms || property.buildingSize || property.landSize) && (
               <div style={{ fontSize: 12, color: 'rgb(112,118,118)', marginBottom: 6 }}>
                 {[
                   property.bedrooms ? `${property.bedrooms} Beds` : null,
@@ -120,15 +99,13 @@ export const AdListCard = ({ property, isTop }: Props) => {
               </div>
             )}
 
-            {/* Member + Location */}
             <div style={{ marginTop: 'auto' }}>
-              <MemberBadge seller={property.seller} />
+              {!isMobile && <MemberBadge seller={property.seller} />}
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <LocationPin />
-                <span style={{ fontSize: 12, color: 'rgb(112,118,118)' }}>
-                  {property.city}, {property.district}
-                </span>
+                <span style={{ fontSize: 11, color: 'rgb(112,118,118)' }}>{property.city}, {property.district}</span>
               </div>
+              {isMobile && <div style={{ fontSize: 11, color: 'rgb(112,118,118)', marginTop: 2 }}>{timeAgo(property.postedDate)}</div>}
             </div>
           </div>
         </Link>
@@ -141,49 +118,36 @@ export const AdListCard = ({ property, isTop }: Props) => {
     <div style={{ borderBottom: '1px solid rgb(231,237,238)', backgroundColor: '#fff', fontFamily: FA }}>
       <Link
         to={`/properties/${property.id}`}
-        style={{ display: 'flex', textDecoration: 'none', color: 'inherit', padding: '8px 12px', gap: 10 }}
+        style={{ display: 'flex', textDecoration: 'none', color: 'inherit', padding: isMobile ? '8px 10px' : '8px 12px', gap: isMobile ? 8 : 10 }}
       >
         {/* Image */}
-        <div style={{ width: 136, height: 102, flexShrink: 0, overflow: 'hidden', backgroundColor: '#ddd' }}>
+        <div style={{ width: imgW, height: imgH, flexShrink: 0, overflow: 'hidden', backgroundColor: '#ddd' }}>
           {img && (
-            <img
-              src={img}
-              alt={property.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-            />
+            <img src={img} alt={property.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
           )}
         </div>
 
         {/* Content */}
         <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-          {/* Title + Time */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 2 }}>
-            <div style={{
-              fontSize: 14, fontWeight: 700, color: 'rgb(47,52,50)',
-              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-              lineHeight: '1.3', flex: 1, minWidth: 0,
-            }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 4, marginBottom: 2 }}>
+            <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 700, color: 'rgb(47,52,50)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: '1.3', flex: 1, minWidth: 0 }}>
               {property.title}
             </div>
-            <div style={{ fontSize: 11, color: 'rgb(112,118,118)', flexShrink: 0, whiteSpace: 'nowrap', paddingTop: 1 }}>
-              {timeAgo(property.postedDate)}
-            </div>
+            {!isMobile && (
+              <div style={{ fontSize: 11, color: 'rgb(112,118,118)', flexShrink: 0, whiteSpace: 'nowrap', paddingTop: 1 }}>
+                {timeAgo(property.postedDate)}
+              </div>
+            )}
           </div>
 
-          {/* Price */}
-          <div style={{ fontSize: 15, fontWeight: 700, color: 'rgb(0,152,119)', marginBottom: 3 }}>
+          <div style={{ fontSize: isMobile ? 13 : 15, fontWeight: 700, color: 'rgb(0,152,119)', marginBottom: 3 }}>
             Rs {property.price.toLocaleString()}
-            {property.priceType === 'monthly' && (
-              <span style={{ fontSize: 11, fontWeight: 400, color: 'rgb(112,118,118)' }}> /month</span>
-            )}
-            {property.priceType === 'negotiable' && (
-              <span style={{ fontSize: 11, fontWeight: 400, color: 'rgb(112,118,118)', marginLeft: 4 }}>Negotiable</span>
-            )}
+            {property.priceType === 'monthly' && <span style={{ fontSize: 11, fontWeight: 400, color: 'rgb(112,118,118)' }}> /month</span>}
+            {property.priceType === 'negotiable' && <span style={{ fontSize: 11, fontWeight: 400, color: 'rgb(112,118,118)', marginLeft: 4 }}>Negotiable</span>}
           </div>
 
-          {/* Specs */}
-          {(property.bedrooms || property.bathrooms) && (
+          {!isMobile && (property.bedrooms || property.bathrooms) && (
             <div style={{ fontSize: 11, color: 'rgb(112,118,118)', marginBottom: 4 }}>
               {[
                 property.bedrooms ? `${property.bedrooms} Beds` : null,
@@ -192,15 +156,13 @@ export const AdListCard = ({ property, isTop }: Props) => {
             </div>
           )}
 
-          {/* Member + Location */}
           <div style={{ marginTop: 'auto' }}>
-            <MemberBadge seller={property.seller} />
+            {!isMobile && <MemberBadge seller={property.seller} />}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <LocationPin />
-              <span style={{ fontSize: 11, color: 'rgb(112,118,118)' }}>
-                {property.city}, {property.district}
-              </span>
+              <span style={{ fontSize: 11, color: 'rgb(112,118,118)' }}>{property.city}, {property.district}</span>
             </div>
+            {isMobile && <div style={{ fontSize: 11, color: 'rgb(112,118,118)', marginTop: 2 }}>{timeAgo(property.postedDate)}</div>}
           </div>
         </div>
       </Link>

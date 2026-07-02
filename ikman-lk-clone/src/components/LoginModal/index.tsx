@@ -139,6 +139,7 @@ export const LoginModal = () => {
           borderRadius: 4, width: '100%', maxWidth: 688,
           maxHeight: '95vh', overflowY: 'auto',
           padding: '16px 16px 0',
+          margin: '0 12px',
         }}
         onClick={e => e.stopPropagation()}
       >

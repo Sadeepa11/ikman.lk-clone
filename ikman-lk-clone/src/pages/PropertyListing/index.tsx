@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { Pagination } from '../../components/common/Pagination';
 import { AdListCard } from '../../components/property/AdListCard';
 import { useFilter } from '../../hooks/useFilter';
@@ -432,6 +433,7 @@ export const PropertyListingPage = () => {
       .map(d => ({ value: d, label: d })),
   ];
 
+  const isMobile = useIsMobile();
   const pageStart = total === 0 ? 0 : (page - 1) * PER_PAGE + 1;
   const pageEnd = Math.min(page * PER_PAGE, total);
   const hasFilters = !!(filters.district || filters.category || filters.type || filters.posterType || filters.promotionType);
@@ -440,15 +442,16 @@ export const PropertyListingPage = () => {
   return (
     <div style={{ backgroundColor: '#f4f4f4', minHeight: '100vh', fontFamily: "'Open Sans', Arial, sans-serif" }}>
 
-      {/* Search row — matches real ikman.lk */}
-      <div style={{ backgroundColor: '#fff', padding: '9px 0', borderBottom: '1px solid #e5e5e5' }}>
+      {/* Search row */}
+      <div style={{ backgroundColor: '#fff', padding: isMobile ? '12px 0' : '9px 0', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{
-          maxWidth: 985, margin: '0 auto', padding: '0 8px',
-          display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16,
+          maxWidth: 985, margin: '0 auto', padding: '0 12px',
+          display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'stretch' : 'center', gap: isMobile ? 10 : 16,
         }}>
-          {/* Right: Heading + Breadcrumb */}
+          {/* Heading + Breadcrumb */}
           <div style={{ flex: 1 }}>
-            <h1 style={{ fontSize: 16, fontWeight: 800, color: 'rgb(47, 52, 50)', margin: '0 0 4px' }}>
+            <h1 style={{ fontSize: isMobile ? 14 : 16, fontWeight: 800, color: 'rgb(47, 52, 50)', margin: '0 0 4px' }}>
               Buy, Sell, Rent or Find Anything in Sri Lanka
             </h1>
             <div style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 4, color: '#424e4e', flexWrap: 'wrap' }}>
@@ -470,7 +473,7 @@ export const PropertyListingPage = () => {
             </div>
           </div>
 
-          {/* Left: Search bar */}
+          {/* Search bar */}
           <div style={{ flex: 1 }}>
             <form
               onSubmit={handleSearchSubmit}
@@ -486,9 +489,9 @@ export const PropertyListingPage = () => {
                 defaultValue={filters.search}
                 placeholder="What are you looking for?"
                 style={{
-                  flex: 1, padding: '11px 24px',
+                  flex: 1, padding: isMobile ? '9px 16px' : '11px 24px',
                   border: 'none', outline: 'none',
-                  fontSize: 16, backgroundColor: '#fff',
+                  fontSize: isMobile ? 14 : 16, backgroundColor: '#fff',
                   fontFamily: "'Open Sans', Arial, sans-serif",
                   color: '#333',
                 }}
@@ -514,7 +517,7 @@ export const PropertyListingPage = () => {
         </div>
       </div>
 
-      <div style={{ maxWidth: 985, margin: '0 auto', padding: '10px 8px 24px' }}>
+      <div style={{ maxWidth: 985, margin: '0 auto', padding: isMobile ? '8px 12px 24px' : '10px 8px 24px' }}>
 
         {/* Filter bar — exact real ikman.lk */}
         <div style={{

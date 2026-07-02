@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 const FA = "'Open Sans', Arial, sans-serif";
 
@@ -533,29 +534,53 @@ const getContent = (pathname: string) => {
 export const AccountPage = () => {
   const location = useLocation();
   const activeHref = location.pathname;
+  const isMobile = useIsMobile();
 
   return (
     <div style={{ backgroundColor: '#f4f4f4', minHeight: '100vh', fontFamily: FA }}>
-      <div style={{ maxWidth: 985, margin: '16px auto', padding: '0 8px 34px' }}>
-        <div style={{ backgroundColor: '#fff', borderRadius: 4, padding: 24, display: 'flex' }}>
+      <div style={{ maxWidth: 985, margin: '16px auto', padding: isMobile ? '0 0 24px' : '0 8px 34px' }}>
+        <div style={{
+          backgroundColor: '#fff', borderRadius: isMobile ? 0 : 4,
+          padding: isMobile ? 0 : 24,
+          display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+        }}>
 
-          {/* Left Navigation */}
-          <div style={{ width: '24%', flexShrink: 0, overflowY: 'auto' }}>
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <h4 style={{
-                  fontSize: 18, fontWeight: 400,
-                  color: 'rgb(47,52,50)', fontFamily: FA, margin: '0 0 12px',
-                }}>
+          {/* Navigation — horizontal scroll on mobile, sidebar on desktop */}
+          <div style={isMobile ? {
+            borderBottom: '1px solid rgb(212,222,217)',
+            overflowX: 'auto', whiteSpace: 'nowrap',
+            padding: '0 12px', scrollbarWidth: 'none',
+          } : { width: '24%', flexShrink: 0 }}>
+            {isMobile ? (
+              <div style={{ display: 'inline-flex', gap: 0 }}>
+                {accountNavItems.map(item => {
+                  const isActive = item.href === activeHref;
+                  return (
+                    <Link key={item.label} to={item.href} style={{
+                      display: 'inline-block', padding: '12px 14px',
+                      fontSize: 13, fontWeight: isActive ? 700 : 400,
+                      color: isActive ? 'rgb(20,151,119)' : 'rgb(47,52,50)',
+                      textDecoration: 'none', whiteSpace: 'nowrap',
+                      borderBottom: isActive ? '2px solid rgb(20,151,119)' : '2px solid transparent',
+                      fontFamily: FA,
+                    }}>
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ marginBottom: 20 }}>
+                <h4 style={{ fontSize: 18, fontWeight: 400, color: 'rgb(47,52,50)', fontFamily: FA, margin: '0 0 12px' }}>
                   Account
                 </h4>
+                <NavList items={accountNavItems} activeHref={activeHref} />
               </div>
-              <NavList items={accountNavItems} activeHref={activeHref} />
-            </div>
+            )}
           </div>
 
           {/* Main Content */}
-          <div style={{ flex: 1, minWidth: 0, padding: '13px 20px' }}>
+          <div style={{ flex: 1, minWidth: 0, padding: isMobile ? '16px 12px' : '13px 20px' }}>
             {getContent(activeHref)}
           </div>
 
