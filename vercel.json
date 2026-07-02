@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd ikman-lk-clone && npm install && npm run build",
+  "outputDirectory": "ikman-lk-clone/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
